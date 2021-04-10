@@ -5,10 +5,9 @@ using namespace std;
 #include <sys/wait.h>
 #include <math.h>
 pthread_mutex_t lock;
-//#define Frame_num 5
 
 int page_table[1000][5];
-int total_pages;
+int total_pages;                                                                //Global declaration of page table 
 int counter[1000][17];
 int bits;
 int frame_acc;
@@ -21,13 +20,13 @@ int replacement(int r,int m)
         int check[1000];
         for(i=0; i < total_pages ;i++)
         {
-                check[i] = 10000;
+                check[i] = 10000;                               //sets a high value of 10000 so that min value can choosen
                 if(page_table[i][0]==1)
                 {
                         val = 0;
                         for(j=0; j< bits ;j++)
                         {
-                                val = val + counter[i][(bits - j - 1)] * pow(2,j);
+                                val = val + counter[i][(bits - j - 1)] * pow(2,j);    //converting binary value stored in counter to value
                         }
                         check[i] = val;
                 }
@@ -38,7 +37,7 @@ int replacement(int r,int m)
                 if(check[i] < min)
                 {
                         min = check[i];
-                        ret = i;
+                        ret = i;                                                // returning minimum value to replace page               
                 }
         }
         return ret;
@@ -52,7 +51,7 @@ int clockIncrease(int p)
         {
                 if(page_table[i][0] == 1  && i!= p)
                 {
-                        page_table[i][2] = 0;
+                        page_table[i][2] = 0;                                   // setting referenced bit to zero
                 }
         }
 }
@@ -66,7 +65,7 @@ int shift()
                 {
                         for(j=bits - 1;j > 0 ;j--)
                         {
-                                counter[i][j] = counter[i][j - 1];
+                                counter[i][j] = counter[i][j - 1];              //function to shift the counter to left and set rightmost bit to reference bit value
                         }
                         counter[i][0] = page_table[i][2];
                         page_table[i][2] = 0;
@@ -81,7 +80,7 @@ void print()
         {
                 for(j=0;j<bits;j++)
                 {
-                        cout<<counter[i][j];
+                        cout<<counter[i][j];                    //printing the value in the counter array
                 }
                 cout<<" ";
         }
@@ -93,13 +92,13 @@ void setcounter(int pno)
         int i;
         for(i=0;i<bits;i++)
         {
-                counter[pno][i] = 0;
+                counter[pno][i] = 0;                            //Initialy all value in counter set to zero
         }
 }
 
-void accessPT(int pno,int rw)
+void accessPT(int pno,int rw)                                   //function to access page table
 {
-        pthread_mutex_lock(&lock);
+        pthread_mutex_lock(&lock);                              //lock used so that multiple thraeds so not access the page at the same time
 
         int i,k,r,m,frame,j;
         int ret = 10000;
@@ -109,7 +108,7 @@ void accessPT(int pno,int rw)
                 if(frame_acc < frames + 1)
                         frame_acc = frame_acc - 1;
                 k=0;
-                if(rw==0)
+                if(rw==0)                                                                          //If page is present in the frame no page fault
                         page_table[pno][2] = 1;
                 if(rw==1)
                 {
@@ -125,7 +124,7 @@ void accessPT(int pno,int rw)
                         cout<< " No page removed"<<endl;
                         page_table[pno][0] = 1;
                         page_table[pno][1] = 0;
-                        page_table[pno][2] = 1;
+                        page_table[pno][2] = 1;                                                 //Initially only frames are allocated 
                         page_table[pno][3] = frame_acc;
                         p_fault = p_fault + 1;
                 }
@@ -133,7 +132,7 @@ void accessPT(int pno,int rw)
                 {
 
                         cout<< "Page fault for page "<< pno << "|| Mode: "<< rw<< " || ";
-                        ret = replacement(r,m);
+                        ret = replacement(r,m);                                                 //function returns index value of page to be replaced
                         page_table[ret][0] = 0;
                         page_table[ret][1] = 0;
                         page_table[ret][2] = 0;
@@ -156,7 +155,7 @@ void accessPT(int pno,int rw)
         pthread_mutex_unlock(&lock);
 }
 
-void *page(void * arg)
+void *page(void * arg)                                                  //thread for each page in the reference string
 {
         int *page_no =(int *)arg;
         int rw = rand() % 2;
@@ -165,7 +164,6 @@ void *page(void * arg)
 
 void q2()
 {
-        //int frames = 5;  //Frame_num;
         p_fault = 0;
         int i,j;
         int arr[50];
@@ -174,7 +172,7 @@ void q2()
         int num_pages = 12;
         total_pages = num_pages;
         int leng = 20;
-        bits = 8;
+        bits = 8;                                                               //user inputs taken 
         cout<<"Enter total number of pages"<<endl;
         cin>>num_pages;
         cout<<"Enter total number of frames"<<endl;
@@ -191,7 +189,7 @@ void q2()
         {
                 page_table[i][0] = 0;
                 page_table[i][1] = 0;
-                page_table[i][2] = 0;
+                page_table[i][2] = 0;                                                           //Page table initial values set to zero
                 page_table[i][3] = 0;
                 for(j=0;j<8;j++)
                 {
@@ -204,7 +202,7 @@ void q2()
         {
                 while(1)
                 {
-                        arr[i] = rand() % num_pages;
+                        arr[i] = rand() % num_pages;                    //Random used to generate reference string
                         if( i!=0)
                                 check = arr[i];
                         if(check != arr[i-1])
@@ -228,22 +226,15 @@ void q2()
         pthread_mutex_destroy(&lock);
 
 }
-//pthread_mutex_t lock;
-//#define Frame_num 5
-
-//int page_table[1000][5];
-//int total_pages;
-//int frame_acc;
-//frames = 5;
-//int p_fault;
 
 int replacement1(int r,int m)
 {
         int i;
-        for(i=0; i < total_pages ;i++)
+        for(i=0; i < total_pages ;i++)                                          //Not modified, Not Referenced ideal for replacement
+                                                                                //Modified, Not Referenced prefered next
         {
-                if(page_table[i][0]==1)
-                {
+                if(page_table[i][0]==1)                                         //Not modified, Referenced prefered next 
+                {                                                               //Modified,Referenced considered last
                         if(page_table[i][1] == m && page_table[i][2] == r)
                         {
                                 return i;
@@ -262,7 +253,7 @@ int timeCheck1(int p)
                 {
                         if(page_table[i][4] == 6)
                         {
-                                page_table[i][2] = 0;
+                                page_table[i][2] = 0;                   //After 6 clock pulse reference bit set to zero
                                 page_table[i][4] = 0;
                         }
                 }
@@ -274,7 +265,7 @@ int clockIncrease1(int p)
         int i;
         for(i=0 ; i<total_pages ; i++)
         {
-                if(page_table[i][0] == 1  && i!=p)
+                if(page_table[i][0] == 1  && i!=p)                        //counter incremented so that after 6 clock pulse reference bit can be set to zero
                 {
                         page_table[i][4] = page_table[i][4] + 1;
                 }
@@ -293,7 +284,7 @@ void accessPT1(int pno,int rw)
                 cout<< "Page " << pno <<" present in the frame" << "|| Mode: "<<rw << " || "<< endl;
                 if(frame_acc < frames + 1)
                         frame_acc = frame_acc - 1;
-                k=0;
+                k=0;                                                                            //If page has a frame allocated not page fault
                 if(rw==0)
                         page_table[pno][2] = 1;
                         page_table[pno][4]= 0;
@@ -355,16 +346,15 @@ void accessPT1(int pno,int rw)
         pthread_mutex_unlock(&lock);
 }
 
-void *page1(void * arg)
+void *page1(void * arg)                                                                 //Thread created for each pagein reference string
 {
         int *page_no =(int *)arg;
         int rw = rand() % 2;
         accessPT1(*page_no,rw);
 }
 
-void q1()
+void q1()                                                                       //NRU page replacement algorithm
 {
-        //int frames = 5;  //Frame_num;
         p_fault = 0;
         int i;
         int arr[50];
@@ -376,7 +366,7 @@ void q1()
         cout<<"Enter total number of pages"<<endl;
         cin>>num_pages;
         cout<<"Enter total number of frames"<<endl;
-        cin>>frames;
+        cin>>frames;                                                            //User inputs considered
         cout<<"Enter length of reference string"<<endl;
         cin>>leng;
 
@@ -389,7 +379,7 @@ void q1()
                 page_table[i][1] = 0;
                 page_table[i][2] = 0;
                 page_table[i][3] = 0;
-                page_table[i][4] = 0;
+                page_table[i][4] = 0;                                           //page table initially set to zero
         }
         int check = 100;
         cout<<"Reference String : "<<endl;
