@@ -1,8 +1,6 @@
-### Page Replacement Algorithms
+# Page Replacement Algorithms
 
-# 1.     Write a program to simulate the Not-Recently-Used (NRU) Page 
-#        Replacement Algorithm. In particular, the simulator should accept 
-#        the following input from standard input (stdin):
+## 1.     Write a program to simulate the Not-Recently-Used (NRU) Page Replacement Algorithm.
 
        Number of Virtual Pages
        Number of Page Frames Available (not used by page table)
@@ -88,7 +86,7 @@
 
        Total number of faults is 5.
 
-#    2. Repeat part 1 using the Clock Page Replacement Algorithm. 
+##    2. Write a program to simulate the Clock Page Replacement Algorithm. 
 
        For example, if the input data is
 
@@ -124,9 +122,7 @@
              page is read or written. Just advance the clock pointer when 
              looking for a page to be evicted from the physical memory.
 
-#    3. Write a program to simulate the Aging Page Replacement Algorithm. In 
-#       particular, the simulator should accept the following input from 
-#       standard input (stdin):
+#    3. Write a program to simulate the Aging Page Replacement Algorithm.
 
        Number of Page Frames Available
        Number of bits of the counter
