@@ -425,10 +425,11 @@ int check_for_fault(int t,int f, int* arr1,int*arr2)
 
 {
         int flag=0;
+        //loop through the page frame array and check if the referenced page is already present in the page frame array
         for(int i=0;i<f;i++)
 
         {
-                if(t==arr1[i])
+                if(t==arr1[i])//if the referenced element is already present then change the second chance bit to 1 and return 0
                 {
                         arr2[i]=1;
 
@@ -442,27 +443,28 @@ int check_for_fault(int t,int f, int* arr1,int*arr2)
 
                 return 0;
         }
-        else{
+        else{//if the referenced element isnt present in the page frame array then return 0
         return 1;
         }
 }
 int* fn3(int t,int f,int idx,int arr1[],int arr2[])
 {
-        int *newarr=new int[2];
+        int *newarr=new int[2];//array to return the new index and to return the element being evicted.
         int i;
         for(i=0;i<f;i++)
         {
+                //finding the page to be replaced by scanning the second chance array
                 if(arr2[idx]==0)
 
                 {
-                        newarr[0]=arr1[idx];
-                        arr1[idx]=t;
-                        newarr[1]=(idx+1)%f;
-                        return newarr;
+                        newarr[0]=arr1[idx];//store the element that was originally present in the position
+                        arr1[idx]=t;//replace the element 
+                        newarr[1]=(idx+1)%f;//increment the index to return
+                        return newarr;//return the array with new index and the evicted page
                 }
                 else{
-                arr2[idx]=0;
-                idx=(idx+1)%f;}
+                arr2[idx]=0;//change the second chance bit to zero if it is already 1 since it has already been given one chance
+                idx=(idx+1)%f;}//increment the index after changing the second chance bit
         }
 }
 void q3(){
@@ -470,6 +472,7 @@ void q3(){
 
         cout<<"Enter the number of virtual pages"<<endl;
         cin>>vpages;
+              
         cout<<"Enter the number of page frames"<<endl;
         cin>>pframes;
 
@@ -477,8 +480,9 @@ void q3(){
         cout<<"Enter the number of references"<<endl;
 
         cin>>n_ref;
-        int ref_string[n_ref];
+        int ref_string[n_ref];//to store the reference string
         int i;
+        //getting the reference string
         for(i=0;i<n_ref;i++)
         {
                 printf("\nEnter the page referenced(between 0 and (num_of_virtual_pages-1)):");
@@ -489,16 +493,17 @@ void q3(){
         int c=n_ref;
         int faults_count=0;
 
-        int arr[f];
-        int sc[f];
-        int idx=0;
+        int arr[f];//the main page frame array
+        int sc[f];//second chance array
+        int idx=0;//index for going in a circular order in the page frame array and to replace the elements according to clock page replacement algorithm 
         int j;
-        for(j=0;j<f;j++)
+        for(j=0;j<f;j++)//initialising all second chance bits to zero
 
         {
 
                 sc[j]=0;
         }
+        //initialising all members initially in the page table to -999 to verify initial cases where the page fault has occurred but no page is evicted
         for(i=0;i<f;i++)
         {
 
@@ -507,23 +512,23 @@ void q3(){
         for(i=0;i<c;i++)
         {
                 cout<<"Page Referenced:"<<r[i]<<endl;
-                if(check_for_fault(r[i],f,arr,sc))
+                if(check_for_fault(r[i],f,arr,sc))//checking for page fault and proceeding to replace a page in the page frames array
 
                 {     int *ptr=fn3(r[i],f,idx,arr,sc);
 
                         idx=ptr[1];
 
-                        if(ptr[0]==-999){
+                        if(ptr[0]==-999){//if the element being replaced is -999 then there is no page evicted and the referenced page is brought into memory
 
-                        cout<<"Page Fault: no page evicted, page "<<r[i]<<" brought in to memory."<<endl;}
+                        cout<<"Page Fault: no page evicted, page "<<r[i]<<" brought in to memory."<<endl;} 
 
-                        else{
+                        else{//otherwise if the page being evicted isnt -999 then the page being replaced is displayed and the referenced page is brought into memory 
 
                         cout<<"Page Fault: page " <<ptr[0]<<" evicted, page "<<r[i]<<" brought in to memory."<<endl;
 
                         }
 
-                        faults_count++;
+                        faults_count++;//increment the number of page faults
 
                 }
                 else{cout<<"No page fault on referencing page "<<r[i]<< " using Second chance page replacement algorithm"<<endl;
@@ -531,7 +536,7 @@ void q3(){
                }
         }
 
-        cout<<"Total no of page faults is:"<<faults_count<<endl;
+        cout<<"Total no of page faults is:"<<faults_count<<endl;//display the number of page faults
 
 
 }
@@ -542,7 +547,7 @@ int main()
         cout<<"2. Clock Page replacement algorithm\n";
         cout<<"3. Aging Page replacement algorithm\n";
         cin>>opt;
-        if(opt==1) q1();
-        else if (opt==2) q3();
-        else if(opt==3) q2();
+        if(opt==1) q1();//call the function for NRU page replacement algorithm
+        else if (opt==2) q3(); //call the function for the clock page replacement algorithm
+        else if(opt==3) q2();//call the function for the Aging page replacement algorithm
 }
