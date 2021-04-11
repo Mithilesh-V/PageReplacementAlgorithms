@@ -96,16 +96,16 @@
           8	<= 8 virtual pages
           4	<= 4 page frames
           10	<= 10 referencs
-          0 0	<= Page 0 is read from.
-          1 1	<= Page 1 is written to.
-          3 0	<= Page 3 is read from.
-          4 1	<= Page 4 is written to.
-          5 1	<= Page 5 is written to.
-          0 1	<= Page 0 is written to.
-          3 1	<= Page 3 is written to.
-          4 0	<= Page 4 is read from.
-          2 0	<= Page 2 is read from.
-          6 1	<= Page 6 is written to.
+          0 	<= Page 0 is referenced.
+          1 	<= Page 1 is referenced.
+          3 	<= Page 3 is referenced.
+          4 	<= Page 4 is referenced.
+          5 	<= Page 5 is referenced.
+          0 	<= Page 0 is referenced.
+          3 	<= Page 3 is referenced.
+          4 	<= Page 4 is referenced.
+          2 	<= Page 2 is referenced.
+          6 	<= Page 6 is referenced.
 
 
        The output would be:
@@ -121,9 +121,7 @@
 
        Total number of faults is 8.
 
-       Hint: It is not required to advance the clock pointer each time a
-             page is read or written. Just advance the clock pointer when 
-             looking for a page to be evicted from the physical memory.
+  
 
 #    3. Write a program to simulate the Aging Page Replacement Algorithm.
 
