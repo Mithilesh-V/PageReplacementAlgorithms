@@ -7,7 +7,7 @@ using namespace std;
 pthread_mutex_t lock;
 
 int page_table[1000][5];
-int total_pages;                                                                //Global declaration of page table 
+int total_pages;                                                                //Global declaration of page table
 int counter[1000][17];
 int bits;
 int frame_acc;
@@ -37,7 +37,7 @@ int replacement(int r,int m)
                 if(check[i] < min)
                 {
                         min = check[i];
-                        ret = i;                                                // returning minimum value to replace page               
+                        ret = i;                                                // returning minimum value to replace page
                 }
         }
         return ret;
@@ -124,7 +124,7 @@ void accessPT(int pno,int rw)                                   //function to ac
                         cout<< " No page removed"<<endl;
                         page_table[pno][0] = 1;
                         page_table[pno][1] = 0;
-                        page_table[pno][2] = 1;                                                 //Initially only frames are allocated 
+                        page_table[pno][2] = 1;                                                 //Initially only frames are allocated
                         page_table[pno][3] = frame_acc;
                         p_fault = p_fault + 1;
                 }
@@ -172,7 +172,7 @@ void q2()
         int num_pages = 12;
         total_pages = num_pages;
         int leng = 20;
-        bits = 8;                                                               //user inputs taken 
+        bits = 8;                                                               //user inputs taken
         cout<<"Enter total number of pages"<<endl;
         cin>>num_pages;
         cout<<"Enter total number of frames"<<endl;
@@ -233,7 +233,7 @@ int replacement1(int r,int m)
         for(i=0; i < total_pages ;i++)                                          //Not modified, Not Referenced ideal for replacement
                                                                                 //Modified, Not Referenced prefered next
         {
-                if(page_table[i][0]==1)                                         //Not modified, Referenced prefered next 
+                if(page_table[i][0]==1)                                         //Not modified, Referenced prefered next
                 {                                                               //Modified,Referenced considered last
                         if(page_table[i][1] == m && page_table[i][2] == r)
                         {
@@ -448,7 +448,7 @@ int* fn3(int t,int f,int idx,int arr1[],int arr2[])
 
                 {
                         newarr[0]=arr1[idx];//store the element that was originally present in the position
-                        arr1[idx]=t;//replace the element 
+                        arr1[idx]=t;//replace the element
                         newarr[1]=(idx+1)%f;//increment the index to return
                         return newarr;//return the array with new index and the evicted page
                 }
@@ -462,7 +462,7 @@ void q3(){
 
         cout<<"Enter the number of virtual pages"<<endl;
         cin>>vpages;
-              
+
         cout<<"Enter the number of page frames"<<endl;
         cin>>pframes;
 
@@ -475,8 +475,14 @@ void q3(){
         //getting the reference string
         for(i=0;i<n_ref;i++)
         {
+                while(1){
                 printf("\nEnter the page referenced(between 0 and (num_of_virtual_pages-1)):");
                 cin>>ref_string[i];
+                if(ref_string[i]<vpages && ref_string[i]>=0) break;
+                else{
+                        cout<<"Invalid Input!! "<<"Enter a number between "<<0<<" and "<<vpages-1<<" (inclusive)"<<endl;
+                }
+                }
         }
         int *r=ref_string;
         int f=pframes;
@@ -485,7 +491,7 @@ void q3(){
 
         int arr[f];//the main page frame array
         int sc[f];//second chance array
-        int idx=0;//index for going in a circular order in the page frame array and to replace the elements according to clock page replacement algorithm 
+        int idx=0;//index for going in a circular order in the page frame array and to replace the elements according to clock page replacement algorithm
         int j;
         for(j=0;j<f;j++)//initialising all second chance bits to zero
 
@@ -510,9 +516,9 @@ void q3(){
 
                         if(ptr[0]==-999){//if the element being replaced is -999 then there is no page evicted and the referenced page is brought into memory
 
-                        cout<<"Page Fault: no page evicted, page "<<r[i]<<" brought in to memory."<<endl;} 
+                        cout<<"Page Fault: no page evicted, page "<<r[i]<<" brought in to memory."<<endl;}
 
-                        else{//otherwise if the page being evicted isnt -999 then the page being replaced is displayed and the referenced page is brought into memory 
+                        else{//otherwise if the page being evicted isnt -999 then the page being replaced is displayed and the referenced page is brought into memory
 
                         cout<<"Page Fault: page " <<ptr[0]<<" evicted, page "<<r[i]<<" brought in to memory."<<endl;
 
@@ -540,4 +546,7 @@ int main()
         if(opt==1) q1();//call the function for NRU page replacement algorithm
         else if (opt==2) q3(); //call the function for the clock page replacement algorithm
         else if(opt==3) q2();//call the function for the Aging page replacement algorithm
+        else {
+        cout<<"Invalid Option\n";
+        }
 }
