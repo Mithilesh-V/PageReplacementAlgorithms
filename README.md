@@ -1,5 +1,8 @@
 # Page Replacement Algorithms
 
+### Saketh video :
+### Mithilesh video: https://drive.google.com/file/d/1OMeXXVX_6OcKvo2wzYfJHS0Ajgwgm5zO/view?usp=sharing
+
 ## 1.     Write a program to simulate the Not-Recently-Used (NRU) Page Replacement Algorithm.
 
        Number of Virtual Pages
