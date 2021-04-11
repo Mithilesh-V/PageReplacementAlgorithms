@@ -1,6 +1,6 @@
 # Page Replacement Algorithms
 
-### Video:
+### Video: https://drive.google.com/file/d/1weh224q3bVDFpHZHImuO3I1ApXMpAUEe/view?usp=sharing
 
 ## 1.     Write a program to simulate the Not-Recently-Used (NRU) Page Replacement Algorithm.
 
